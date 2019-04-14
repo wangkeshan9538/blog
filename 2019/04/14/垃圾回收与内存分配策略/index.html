@@ -5,15 +5,19 @@
   
 
   
-  <title>Hexo</title>
+  <title>垃圾回收和内存分配策略 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/blog/index.html">
+  <meta name="description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾回收和内存分配策略">
+<meta property="og:url" content="http://yoursite.com/blog/2019/04/14/垃圾回收与内存分配策略/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-14T14:36:00.449Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="垃圾回收和内存分配策略">
+<meta name="twitter:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
   
     <link rel="alternate" href="/blog/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +64,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-垃圾回收与内存分配策略" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-垃圾回收与内存分配策略" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/blog/2019/04/14/垃圾回收与内存分配策略/" class="article-date">
   <time datetime="2019-04-14T14:26:12.708Z" itemprop="datePublished">2019-04-14</time>
@@ -75,8 +77,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2019/04/14/垃圾回收与内存分配策略/">垃圾回收和内存分配策略</a>
+    <h1 class="article-title" itemprop="name">
+      垃圾回收和内存分配策略
     </h1>
   
 
@@ -174,11 +176,9 @@
     </footer>
   </div>
   
-</article>
-
-
+    
   
-
+</article>
 
 </section>
         
