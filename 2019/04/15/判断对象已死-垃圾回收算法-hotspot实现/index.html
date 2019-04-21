@@ -8,13 +8,14 @@
   <title>判断对象已死-垃圾回收算法-hotspot实现 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="判断对象已死-垃圾回收算法-hotspot实现">
-<meta property="og:url" content="http://yoursite.com/blog/2019/04/14/判断对象已死-垃圾回收算法-hotspot实现/index.html">
+<meta property="og:url" content="http://yoursite.com/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-15T14:38:11.673Z">
+<meta property="og:updated_time" content="2019-04-21T15:14:13.468Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="判断对象已死-垃圾回收算法-hotspot实现">
 <meta name="twitter:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
@@ -66,8 +67,8 @@
       <div class="outer">
         <section id="main"><article id="post-判断对象已死-垃圾回收算法-hotspot实现" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2019/04/14/判断对象已死-垃圾回收算法-hotspot实现/" class="article-date">
-  <time datetime="2019-04-14T14:26:12.708Z" itemprop="datePublished">2019-04-14</time>
+    <a href="/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/" class="article-date">
+  <time datetime="2019-04-15T13:13:46.000Z" itemprop="datePublished">2019-04-15</time>
 </a>
     
   </div>
@@ -170,9 +171,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/blog/2019/04/14/判断对象已死-垃圾回收算法-hotspot实现/" data-id="cjupnjftw0001fcp30y2iie0g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/" data-id="cjuqxfuco0006zgp3s73r1d2b" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/JVM/">JVM</a></li></ul>
+
     </footer>
   </div>
   
@@ -202,9 +205,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JVM/">JVM</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/JVM/" style="font-size: 10px;">JVM</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -223,11 +240,15 @@
       <ul>
         
           <li>
+            <a href="/blog/2019/04/21/G1学习/">G1学习</a>
+          </li>
+        
+          <li>
             <a href="/blog/2019/04/15/垃圾回收器/">垃圾回收器</a>
           </li>
         
           <li>
-            <a href="/blog/2019/04/14/判断对象已死-垃圾回收算法-hotspot实现/">判断对象已死-垃圾回收算法-hotspot实现</a>
+            <a href="/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/">判断对象已死-垃圾回收算法-hotspot实现</a>
           </li>
         
       </ul>

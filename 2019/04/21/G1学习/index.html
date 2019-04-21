@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>G1学习 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之所以单独写一篇是觉得 深入理解JVM虚拟机这本书，对G1细节讲的太少，而且在网上查的资料看起来也很模糊，甚至很有误导性，所以整理了下，但说实话我还是没有理解这个G1完整的过程，将来还是需要慢慢理解整理。 内存分配描述G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，H表示的是巨型">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="G1学习">
+<meta property="og:url" content="http://yoursite.com/blog/2019/04/21/G1学习/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="之所以单独写一篇是觉得 深入理解JVM虚拟机这本书，对G1细节讲的太少，而且在网上查的资料看起来也很模糊，甚至很有误导性，所以整理了下，但说实话我还是没有理解这个G1完整的过程，将来还是需要慢慢理解整理。 内存分配描述G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，H表示的是巨型">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/blog/2019/04/21/G1学习/images/g1收集器内存分布.png">
+<meta property="og:image" content="http://yoursite.com/blog/2019/04/21/G1学习/images/cardTable.png">
+<meta property="og:updated_time" content="2019-04-21T15:11:58.534Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="G1学习">
+<meta name="twitter:description" content="之所以单独写一篇是觉得 深入理解JVM虚拟机这本书，对G1细节讲的太少，而且在网上查的资料看起来也很模糊，甚至很有误导性，所以整理了下，但说实话我还是没有理解这个G1完整的过程，将来还是需要慢慢理解整理。 内存分配描述G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，H表示的是巨型">
+<meta name="twitter:image" content="http://yoursite.com/blog/2019/04/21/G1学习/images/g1收集器内存分布.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/blog/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com/blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-G1学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2019/04/21/G1学习/" class="article-date">
+  <time datetime="2019-04-21T12:44:22.000Z" itemprop="datePublished">2019-04-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      G1学习
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之所以单独写一篇是觉得 深入理解JVM虚拟机这本书，对G1细节讲的太少，而且在网上查的资料看起来也很模糊，甚至很有误导性，所以整理了下，但说实话我还是没有理解这个G1完整的过程，将来还是需要慢慢理解整理。</p>
+<h1 id="内存分配描述"><a href="#内存分配描述" class="headerlink" title="内存分配描述"></a>内存分配描述</h1><p>G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布<br><img src="images/g1收集器内存分布.png" alt="g1收集器内存分布"><br>每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，<br>H表示的是巨型对象，巨型对象默认是分配在老年区，但是如果是短期的，那么会对老年区造成影响，所以G1划分了H区，如果一个H区放不下，那么会分配连续的空间存放</p>
+<h1 id="GC-模式"><a href="#GC-模式" class="headerlink" title="GC 模式"></a>GC 模式</h1><p>共有三种GC模式:  </p>
+<ol>
+<li>young gc</li>
+<li>mixed gc<br> 分为两个部分：  <ol>
+<li>global concurrent marking </li>
+<li>混合垃圾回收  <strong>STW</strong></li>
+</ol>
+</li>
+<li>full gc  </li>
+</ol>
+<p>young gc一般是当所有的eden region都被耗尽，就触发一次young gc,执行完一次之后，对象被拷贝survivor 或者old </p>
+<p>mixed gc 并不是一个old gc,这是重点， 他会回收整个的young，和部分的old,当老年代达到了内存的阙值时触发</p>
+<h2 id="young-gc"><a href="#young-gc" class="headerlink" title="young gc"></a>young gc</h2><p>STW</p>
+<p>阶段分为：  </p>
+<ol>
+<li>根扫描， 静态和本地对象被扫描  </li>
+<li>更新RS， 处理dirty card队列更新RS </li>
+<li>处理RS， 检测从年轻代指向年老代的对象</li>
+<li>对象拷贝，复制到survivor 和old</li>
+<li>处理引用队列，软引用，弱引用，虚引用处理</li>
+</ol>
+<p>其实不是很理解步骤2，3</p>
+<p>这里思考一个问题，如果要只收集young, 但young 和old肯定是会有互相引用，难道要扫描全部内存？G1使用了remember set (rset) ,每个region有一个rset，记录谁引用了这块region（point-in）,这个概念在其他收集器中也有体现（资料说是CMS，但我觉得只要分代收集就要用这个），但在之前rset记录的是老年代引用了哪些新生代对象（point-out）,所以直接扫描这块，就不用扫描全部，  </p>
+<p>在G1中使用的是ponit-in,记录的是谁引用了这块，因为分区太多，这个rset只记录年老代到新生代的引用，因为每次GC eden都被扫描，</p>
+<p>这就又产生一个问题，一个region有很多对象，记录可能会很多 ，所以又产生一个概念，cardTable, 其实就是把一个分区划分为多个区域，rset只记录指向哪个区域，而不是精确到对象</p>
+<p><img src="images/cardTable.png" alt="rset和cardTable">  </p>
+<h2 id="mixed-gc"><a href="#mixed-gc" class="headerlink" title="mixed gc"></a>mixed gc</h2><p>选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region。在用户指定的开销目标范围内尽可能选择收益高的老年代Region</p>
+<p>分为两个步骤：</p>
+<ol>
+<li>全局并发标记（global concurrent marking）</li>
+<li>混合垃圾回收</li>
+</ol>
+<p>global concurrent marking<strong>主要为mix gc提供标记服务</strong>，并不是必须环节，分为五个步骤：</p>
+<ol>
+<li>初始标记（initial mark，STW）<br>stop-the-world，它伴随着一次普通的 Young GC 发生，然后对 Survivor 区（root region）进行标记，因为该区可能存在对老年代的引用，因为 Young GC 是需要 stop-the-world 的，所以并发标记直接重用这个阶段</li>
+<li>根区域扫描（root region scan）<br>扫描 Survivor 到老年代的引用，该阶段必须在下一次 Young GC 发生前结束  </li>
+<li>并发标记（Concurrent Marking）<br>寻找整个堆的存活对象，该阶段可以被 Young GC 中断</li>
+<li>最终标记（Remark，STW）<br>stop-the-world，完成最后的存活对象标记。使用了比 CMS 收集器更加高效的 snapshot-at-the-beginning (SATB) 算法</li>
+<li>清除垃圾（Cleanup，STW）<br>清除空Region，<strong>即没有存活对象的region</strong>，所以这步不能看作mixgc的清理阶段</li>
+</ol>
+<p>并发标记结束后是混合垃圾回收周期，不仅进行年轻代垃圾收集，而且回收之前标记出来的老年代的垃圾最多的部分区块。</p>
+<p>混合垃圾回收周期会持续进行，直到几乎所有的被标记出来的分区（垃圾占比大的分区）都得到回收，然后恢复到常规的年轻代垃圾收集，最终再次启动并发标记。</p>
+<p>所以看起来young gc 和mix gc并不是互斥进行，可以说是同时在进行。</p>
+<h2 id="full-gc"><a href="#full-gc" class="headerlink" title="full gc"></a>full gc</h2><p>什么情况会触发full gc（STW收集）：</p>
+<ol>
+<li>concurrent mode failure：并发模式失败，CMS 收集器也有同样的概念。G1 并发标记期间，如果在标记结束前，老年代被填满，G1 会放弃标记</li>
+<li>晋升失败：并发周期结束后，是混合垃圾回收周期，伴随着年轻代垃圾收集，进行清理老年代空间，如果这个时候清理的速度小于消耗的速度，导致老年代不够用，那么会发生晋升失败</li>
+<li>疏散失败：年轻代垃圾收集的时候，如果 Survivor 和 Old 区没有足够的空间容纳所有的存活对象。这种情况肯定是非常致命的，因为基本上已经没有多少空间可以用了，这个时候会触发 Full GC 也是很合理的。</li>
+</ol>
+<h2 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h2><p>TODO 待补全</p>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h2><p>TODO 待补全</p>
+<p>参考：</p>
+<blockquote>
+<p><a href="http://blog.jobbole.com/109170/" target="_blank" rel="noopener">http://blog.jobbole.com/109170/</a><br><a href="http://ifeve.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" target="_blank" rel="noopener">http://ifeve.com/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</a><br><a href="https://tech.meituan.com/2016/09/23/g1.html" target="_blank" rel="noopener">https://tech.meituan.com/2016/09/23/g1.html</a> 讲的最好<br><a href="https://juejin.im/entry/5af0832c51882567244deb44" target="_blank" rel="noopener">https://juejin.im/entry/5af0832c51882567244deb44</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/blog/2019/04/21/G1学习/" data-id="cjuqxfubn0000zgp3qhbtxm3v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2019/04/15/垃圾回收器/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">垃圾回收器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/JVM/">JVM</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/blog/tags/JVM/" style="font-size: 10px;">JVM</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/04/">April 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2019/04/21/G1学习/">G1学习</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2019/04/15/垃圾回收器/">垃圾回收器</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/">判断对象已死-垃圾回收算法-hotspot实现</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css">
+  <script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
