@@ -72,7 +72,7 @@
     root: '/blog/',
     scheme: 'Muse',
     version: '7.1.0',
-    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    sidebar: {"position":"right","display":"always","offset":12,"onmobile":false,"dimmer":false},
     back2top: true,
     back2top_sidebar: false,
     fancybox: false,
@@ -104,12 +104,12 @@
 <meta property="og:site_name" content="wks藏在这里">
 <meta property="og:description" content="使用场景总览 serial 收集器 可以使用在新生代 单线程 进行收集操作的时候 stop the world  使用复制算法    serial_old 老年代版本的serial 收集器 单线程  使用标记-整理算法   主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，  Pa">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/blog/2019/04/15/垃圾回收器/images/垃圾收集器的使用场景.png">
-<meta property="og:updated_time" content="2019-04-21T12:49:52.543Z">
+<meta property="og:image" content="http://yoursite.com/blog/images/垃圾收集器的使用场景.png">
+<meta property="og:updated_time" content="2019-05-03T11:05:17.018Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="垃圾回收器">
 <meta name="twitter:description" content="使用场景总览 serial 收集器 可以使用在新生代 单线程 进行收集操作的时候 stop the world  使用复制算法    serial_old 老年代版本的serial 收集器 单线程  使用标记-整理算法   主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，  Pa">
-<meta name="twitter:image" content="http://yoursite.com/blog/2019/04/15/垃圾回收器/images/垃圾收集器的使用场景.png">
+<meta name="twitter:image" content="http://yoursite.com/blog/images/垃圾收集器的使用场景.png">
 
 
 
@@ -454,7 +454,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-21 20:49:52" itemprop="dateModified" datetime="2019-04-21T20:49:52+08:00">2019-04-21</time>
+                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
               
             
           </span>
@@ -488,7 +488,7 @@
       
 
       
-        <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="images/垃圾收集器的使用场景.png" alt="总览"></p>
+        <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
 <h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
 <li>可以使用在新生代</li>
 <li>单线程</li>
@@ -655,25 +655,12 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                    
-                      
-                    
-                    <span class="site-state-item-count">1</span>
-                    <span class="site-state-item-name">分类</span>
-                  
-                </div>
               
 
               

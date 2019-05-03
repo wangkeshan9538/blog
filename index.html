@@ -72,7 +72,7 @@
     root: '/blog/',
     scheme: 'Muse',
     version: '7.1.0',
-    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    sidebar: {"position":"right","display":"always","offset":12,"onmobile":false,"dimmer":false},
     back2top: true,
     back2top_sidebar: false,
     fancybox: false,
@@ -388,6 +388,184 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/27/性能监控与故障处理工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wks">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wks藏在这里">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2019/04/27/性能监控与故障处理工具/" class="post-title-link" itemprop="url">性能监控与故障处理工具</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-27 17:16:11" itemprop="dateCreated datePublished" datetime="2019-04-27T17:16:11+08:00">2019-04-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-03 19:05:15" itemprop="dateModified" datetime="2019-05-03T19:05:15+08:00">2019-05-03</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>jdk 所使用的监控工具，主要都是由tools.jar的实现</p>
+<h1 id="JPS"><a href="#JPS" class="headerlink" title="JPS"></a>JPS</h1><p>主要作用：用来列出正在执行的虚拟机进程，并显示虚拟机执行的主类名称，以及这些进程在本地虚拟机唯一ID（与操作系统的PID一致），<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">常用参数：</span><br><span class="line">-m  输出启动时的main参数</span><br><span class="line">-v  输出启动时的jvm参数</span><br><span class="line">-l  输出全类名，如果是jar包启动，输出jar路径</span><br></pre></td></tr></table></figure></p>
+<h1 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h1><p>是用于监视虚拟机各种运行状态信息的命令行工具,可显示本地或远程的虚拟机进程的 <strong>类加载，内存，垃圾回收，JIT编译等运行数据</strong>，<br>命令格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</span><br><span class="line"></span><br><span class="line">options:</span><br><span class="line">-class</span><br><span class="line">-compiler</span><br><span class="line">-gc</span><br><span class="line">-gccapacity</span><br><span class="line">-gccause</span><br><span class="line">-gcmetacapacity</span><br><span class="line">-gcnew</span><br><span class="line">-gcnewcapacity</span><br><span class="line">-gcold</span><br><span class="line">-gcoldcapacity</span><br><span class="line">-gcutil</span><br><span class="line">-printcompilation</span><br></pre></td></tr></table></figure></p>
+<p>参考：</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/zhaozheng7758/article/details/8623549" target="_blank" rel="noopener">https://blog.csdn.net/zhaozheng7758/article/details/8623549</a></p>
+</blockquote>
+<h1 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h1><p>可以实时的<strong>查看和修改</strong>虚拟机的各项参数，jps -v也可以看到启动参数，但如果想看一些默认参数，可以使用 jinfo -flag 打印，还可以使用-sysprops选项把虚拟机进程的System.getProperties（）的内容打印出来，-flag name=value修改一部分运行期可写的虚拟机参数值</p>
+<h1 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h1><p>可以打印memory dump文件，比较关键的一个工具，曾经面试被问过，但我那时候只知道+HeapDumpOnOutOfMemoryError 来打印dump<br>其实还有 +HeapDumpOnCtrlBreak参数则可以使用[Ctrl]+[Break]键让虚拟机生成dump文件，又或者在Linux系统下通过Kill-3命令发送进程退出信号“吓唬”一下虚拟机，也能拿到dump文件。<br>jmap的作用并不仅仅是为了获取dump文件，它还可以查询finalize执行队列、Java堆和永久代的详细信息，如空间使用率、当前用的是哪种收集器等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jmap -heap 来获得 堆内存情况，</span><br><span class="line">jmap -dump:format=b,file=aaa.dump  18267 打印jvm堆快照文件</span><br></pre></td></tr></table></figure>
+<p>此处需要下载 hotspot对应的 debugInfo ，注意小版本也需要相等，</p>
+<blockquote>
+<p>wget <a href="http://debuginfo.centos.org/7/x86_64/java-1.8.0-openjdk-debuginfo-1.8.0.212.b04-0.el7_6.x86_64.rpm" target="_blank" rel="noopener">http://debuginfo.centos.org/7/x86_64/java-1.8.0-openjdk-debuginfo-1.8.0.212.b04-0.el7_6.x86_64.rpm</a></p>
+</blockquote>
+<h1 id="jhat"><a href="#jhat" class="headerlink" title="jhat"></a>jhat</h1><p>是一个用来分析jmap生成的内存dump文件的工具，但一般用不到，不如直接使用eclipse MAT </p>
+<h1 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h1><p>用来生成 当前的线程快照， 可以用来确认线程长时间停顿 死锁 占用CPU时间长的原因，会打印出所有的线程的运行状况，</p>
+<h1 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h1><p>我起了一个springboot的示例程序来观察内存，<br>使用jstat 查看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NGCMN    NGCMX     NGC     S0C   S1C       EC      OGCMN      OGCMX       OGC         OC       MCMN     MCMX      MC     CCSMN    CCSMX     CCSC    YGC    FGC </span><br><span class="line">5440.0  83968.0   9984.0  960.0  960.0   8064.0    10944.0   167936.0    19848.0    19848.0      0.0 1081344.0  35456.0      0.0 1048576.0   4480.0     80     2</span><br><span class="line"></span><br><span class="line">top:</span><br><span class="line">PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                              </span><br><span class="line">18267 wks       20   0 2242.5m 127.8m  13.0m S  0.0 13.1   0:54.99 java</span><br></pre></td></tr></table></figure>
+<p>问题在于 OGC +  NGC + MC   !=top 里看到的Java内存大小<br>19848+9984+35456  =   63.7578125‬M<br>这让我很困扰</p>
+<p>Conclusion:<br>java进程占用的内存大小并不只是堆内存，且我们没有办法估算 Java 进程占用的RAM内存，因为有太多的因素，<br>比如 栈内存，对外内存，垃圾回收器的RS，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Total memory = Heap + Code Cache + Metaspace + Symbol tables +</span><br><span class="line">               Other JVM structures + Thread stacks +</span><br><span class="line">               Direct buffers + Mapped files +</span><br><span class="line">               Native Libraries + Malloc overhead + ...</span><br></pre></td></tr></table></figure></p>
+<p>参考：</p>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/53451103/java-using-much-more-memory-than-heap-size-or-size-correctly-docker-memory-limi" target="_blank" rel="noopener">https://stackoverflow.com/questions/53451103/java-using-much-more-memory-than-heap-size-or-size-correctly-docker-memory-limi</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/21/G1学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -433,12 +611,24 @@
                 
               
 
-              <time title="创建时间：2019-04-21 20:44:22 / 修改时间：23:11:58" itemprop="dateCreated datePublished" datetime="2019-04-21T20:44:22+08:00">2019-04-21</time>
+              <time title="创建时间：2019-04-21 20:44:22" itemprop="dateCreated datePublished" datetime="2019-04-21T20:44:22+08:00">2019-04-21</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-03 19:05:14" itemprop="dateModified" datetime="2019-05-03T19:05:14+08:00">2019-05-03</time>
               
             
           </span>
@@ -475,7 +665,7 @@
         
           
             <p>之所以单独写一篇是觉得 深入理解JVM虚拟机这本书，对G1细节讲的太少，而且在网上查的资料看起来也很模糊，甚至很有误导性，所以整理了下，但说实话我还是没有理解这个G1完整的过程，将来还是需要慢慢理解整理。</p>
-<h1 id="内存分配描述"><a href="#内存分配描述" class="headerlink" title="内存分配描述"></a>内存分配描述</h1><p>G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布<br><img src="images/g1收集器内存分布.png" alt="g1收集器内存分布"><br>每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，<br>H表示的是巨型对象，巨型对象默认是分配在老年区，但是如果是短期的，那么会对老年区造成影响，所以G1划分了H区，如果一个H区放不下，那么会分配连续的空间存放</p>
+<h1 id="内存分配描述"><a href="#内存分配描述" class="headerlink" title="内存分配描述"></a>内存分配描述</h1><p>G1 的内存不再是像以前一样的连续的内存分布，而是非连续的内存分布<br><img src="/blog/images/g1收集器内存分布.png" alt="g1收集器内存分布"><br>每一块是一个region，可以通过-XX:G1HeapRegionSize指定大小，只能是2的幂等次，<br>H表示的是巨型对象，巨型对象默认是分配在老年区，但是如果是短期的，那么会对老年区造成影响，所以G1划分了H区，如果一个H区放不下，那么会分配连续的空间存放</p>
 <h1 id="GC-模式"><a href="#GC-模式" class="headerlink" title="GC 模式"></a>GC 模式</h1><p>共有三种GC模式:  </p>
 <ol>
 <li>young gc</li>
@@ -501,7 +691,7 @@
 <p>这里思考一个问题，如果要只收集young, 但young 和old肯定是会有互相引用，难道要扫描全部内存？G1使用了remember set (rset) ,每个region有一个rset，记录谁引用了这块region（point-in）,这个概念在其他收集器中也有体现（资料说是CMS，但我觉得只要分代收集就要用这个），但在之前rset记录的是老年代引用了哪些新生代对象（point-out）,所以直接扫描这块，就不用扫描全部，  </p>
 <p>在G1中使用的是ponit-in,记录的是谁引用了这块，因为分区太多，这个rset只记录年老代到新生代的引用，因为每次GC eden都被扫描，</p>
 <p>这就又产生一个问题，一个region有很多对象，记录可能会很多 ，所以又产生一个概念，cardTable, 其实就是把一个分区划分为多个区域，rset只记录指向哪个区域，而不是精确到对象</p>
-<p><img src="images/cardTable.png" alt="rset和cardTable">  </p>
+<p><img src="/blog/images/cardTable.png" alt="rset和cardTable">  </p>
 <h2 id="mixed-gc"><a href="#mixed-gc" class="headerlink" title="mixed gc"></a>mixed gc</h2><p>选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region。在用户指定的开销目标范围内尽可能选择收益高的老年代Region</p>
 <p>分为两个步骤：</p>
 <ol>
@@ -582,7 +772,7 @@
 
   
 
-  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
@@ -649,29 +839,11 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-24 23:02:28" itemprop="dateModified" datetime="2019-04-24T23:02:28+08:00">2019-04-24</time>
+                <time title="修改时间：2019-05-03 19:05:16" itemprop="dateModified" datetime="2019-05-03T19:05:16+08:00">2019-05-03</time>
               
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/web前端/" itemprop="url" rel="index"><span itemprop="name">web前端</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -901,7 +1073,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-21 20:49:52" itemprop="dateModified" datetime="2019-04-21T20:49:52+08:00">2019-04-21</time>
+                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
               
             
           </span>
@@ -937,7 +1109,7 @@
       
         
           
-            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="images/垃圾收集器的使用场景.png" alt="总览"></p>
+            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
 <h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
 <li>可以使用在新生代</li>
 <li>单线程</li>
@@ -1074,25 +1246,12 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                    
-                      
-                    
-                    <span class="site-state-item-count">1</span>
-                    <span class="site-state-item-name">分类</span>
-                  
-                </div>
               
 
               
