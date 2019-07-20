@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="wks藏在这里">
 <meta property="og:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-03T11:05:16.029Z">
+<meta property="og:updated_time" content="2019-05-04T09:22:35.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="判断对象已死-垃圾回收算法-hotspot实现">
 <meta name="twitter:description" content="判断对象已死引用计数法缺点：无法判断循环引用 可达性分析定义：称为GC Roots的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个对象不可达）时，则证明此对象是不可用的 GC roots:  虚拟机栈（栈帧中的本地变量表）中引用的对象。 方法区中类静态">
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-03 19:05:16" itemprop="dateModified" datetime="2019-05-03T19:05:16+08:00">2019-05-03</time>
+                <time title="修改时间：2019-05-04 17:22:35" itemprop="dateModified" datetime="2019-05-04T17:22:35+08:00">2019-05-04</time>
               
             
           </span>
@@ -510,7 +510,7 @@
 <p>被弱引用关联的对象只存活到下一次GC就会被回收，提供weakReference来实现</p>
 </blockquote>
 </li>
-<li>弱引用<blockquote>
+<li>虚引用<blockquote>
 <p>最弱的一种引用关系。一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象被收集器回收时收到一个系统通知,提供PhantomReference来实现。</p>
 </blockquote>
 </li>
@@ -602,18 +602,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2019/04/15/垃圾回收器/" rel="next" title="垃圾回收器">
-                <i class="fa fa-chevron-left"></i> 垃圾回收器
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2019/04/21/G1学习/" rel="prev" title="G1学习">
-                G1学习 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2019/04/15/垃圾回收器/" rel="prev" title="垃圾回收器">
+                垃圾回收器 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -683,7 +679,7 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -700,7 +696,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">标签</span>
                   
                 </div>
