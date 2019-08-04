@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="证书大概讲解证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证， 各种文件 X.509 - 这是一种证书标准,主要定义了证书中应该包含哪些内容.  509的两种文件格式：    PEM - Privacy Enhanced Mail,打开看文本格式,以”—–BEGIN…”开头, “—–END…”结尾,内容是BASE64编码.查看PEM格式证书的信息:openssl">
+  <meta name="description" content="证书概述证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证，主要内容：12345678910111213141516**版本**  识别用于该证书的 X.509 标准的版本，这可以影响证书中所能指定的信息。迄今为止，已定义的版本有三个。  **序列号**  发放证书的实体有责任为证书指定序列号，以使其区别于该实体发放的其它证书。此信息用途很多。例如，如果某一证书被撤">
 <meta name="keywords" content="java,加密">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java加密">
 <meta property="og:url" content="http://yoursite.com/blog/2019/07/22/java加密/index.html">
 <meta property="og:site_name" content="wks藏在这里">
-<meta property="og:description" content="证书大概讲解证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证， 各种文件 X.509 - 这是一种证书标准,主要定义了证书中应该包含哪些内容.  509的两种文件格式：    PEM - Privacy Enhanced Mail,打开看文本格式,以”—–BEGIN…”开头, “—–END…”结尾,内容是BASE64编码.查看PEM格式证书的信息:openssl">
+<meta property="og:description" content="证书概述证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证，主要内容：12345678910111213141516**版本**  识别用于该证书的 X.509 标准的版本，这可以影响证书中所能指定的信息。迄今为止，已定义的版本有三个。  **序列号**  发放证书的实体有责任为证书指定序列号，以使其区别于该实体发放的其它证书。此信息用途很多。例如，如果某一证书被撤">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-22T15:15:07.428Z">
+<meta property="og:updated_time" content="2019-08-04T15:39:50.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java加密">
-<meta name="twitter:description" content="证书大概讲解证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证， 各种文件 X.509 - 这是一种证书标准,主要定义了证书中应该包含哪些内容.  509的两种文件格式：    PEM - Privacy Enhanced Mail,打开看文本格式,以”—–BEGIN…”开头, “—–END…”结尾,内容是BASE64编码.查看PEM格式证书的信息:openssl">
+<meta name="twitter:description" content="证书概述证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证，主要内容：12345678910111213141516**版本**  识别用于该证书的 X.509 标准的版本，这可以影响证书中所能指定的信息。迄今为止，已定义的版本有三个。  **序列号**  发放证书的实体有责任为证书指定序列号，以使其区别于该实体发放的其它证书。此信息用途很多。例如，如果某一证书被撤">
 
 
 
@@ -435,12 +435,24 @@
                 
               
 
-              <time title="创建时间：2019-07-22 21:06:53 / 修改时间：23:15:07" itemprop="dateCreated datePublished" datetime="2019-07-22T21:06:53+08:00">2019-07-22</time>
+              <time title="创建时间：2019-07-22 21:06:53" itemprop="dateCreated datePublished" datetime="2019-07-22T21:06:53+08:00">2019-07-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-04 23:39:50" itemprop="dateModified" datetime="2019-08-04T23:39:50+08:00">2019-08-04</time>
               
             
           </span>
@@ -474,11 +486,12 @@
       
 
       
-        <h2 id="证书大概讲解"><a href="#证书大概讲解" class="headerlink" title="证书大概讲解"></a>证书大概讲解</h2><p>证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证，</p>
-<h2 id="各种文件"><a href="#各种文件" class="headerlink" title="各种文件"></a>各种文件</h2><ol>
+        <h2 id="证书概述"><a href="#证书概述" class="headerlink" title="证书概述"></a>证书概述</h2><p>证书主要包括颁发者和被办法者的信息,以及被颁发者的公钥，和CA机构对这些信息的认证，<br>主要内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">**版本**  </span><br><span class="line">识别用于该证书的 X.509 标准的版本，这可以影响证书中所能指定的信息。迄今为止，已定义的版本有三个。  </span><br><span class="line">**序列号**  </span><br><span class="line">发放证书的实体有责任为证书指定序列号，以使其区别于该实体发放的其它证书。此信息用途很多。例如，如果某一证书被撤消，其序列号将放到证书撤消清单 (CRL) 中。  </span><br><span class="line">**签名算法标识符**  </span><br><span class="line">用于识别 CA 签写证书时所用的算法。  </span><br><span class="line">**签发人姓名**  </span><br><span class="line">签写证书的实体的 X.500 名称。它通常为一个 CA。 使用该证书意味着信任签写该证书的实体（注意：有些情况下（例如根或顶层 CA 证书），签发人会签写自己的证书）。  </span><br><span class="line">**有效期**  </span><br><span class="line">每个证书均只能在一个有限的时间段内有效。该有效期以起始日期和时间及终止日期和时间表示，可以短至几秒或长至一世纪。所选有效期取决于许多因素，例如用于签写证书的私钥的使用频率及愿为证书支付的金钱等。它是在没有危及相关私钥的条件下，实体可以依赖公钥值的预计时间。  </span><br><span class="line">**主体名**  </span><br><span class="line">证书可以识别其公钥的实体名。此名称使用 X.500 标准，因此在Internet中应是唯一的。它是实体的特征名 (DN)，例如，</span><br><span class="line">CN=Java Duke，OU=Java Software Division，O=Sun Microsystems Inc，C=US</span><br><span class="line">（这些指主体的通用名、组织单位、组织和国家）。  </span><br><span class="line">**主体公钥信息**  </span><br><span class="line">这是被命名实体的公钥，同时包括指定该密钥所属公钥密码系统的算法标识符及所有相关的密钥参数。</span><br></pre></td></tr></table></figure></p>
+<p>PEM DER 只是编码方式，注意并不指定是<strong>证书</strong>的编码方式，也可以是密钥的编码方式</p>
+<h2 id="各种名词和文件后缀"><a href="#各种名词和文件后缀" class="headerlink" title="各种名词和文件后缀"></a>各种名词和文件后缀</h2><ol>
 <li><p>X.509 - 这是一种证书标准,主要定义了证书中应该包含哪些内容.</p>
 </li>
-<li><p>509的两种文件格式：</p>
+<li><p>两种编码方式：</p>
 </li>
 </ol>
 <ul>
@@ -503,11 +516,39 @@
 <blockquote>
 <p>总结起来：crt cer约等于x509证书，key保存公钥或私钥，csr是证书签名请求，pfx包含证书和私钥</p>
 </blockquote>
-<h2 id="Java-security包"><a href="#Java-security包" class="headerlink" title="Java security包"></a>Java security包</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<ol start="4">
+<li>PKCS系列<br>当我发现还有PKCS系列时，我很凌乱，<br>PKCS系列是  Public-Key Cryptography Standards ，是RSA制定的一系列的标准，注意前面写的什么文件后缀啥的，都不算是<strong>标准</strong>，只有X509和PKCS可以称为标准，<br>PKCS中经常使用的就是：PKCS1 PKCS8 PKCS12 </li>
+</ol>
+<ul>
+<li><p>PKCS#1：定义<strong>RSA</strong>公开密钥算法加密和签名机制，主要用于组织PKCS#7中所描述的数字签名和数字信封。 </p>
+</li>
+<li><p>PKCS#8：描述私有密钥信息格式，该信息包括公开密钥算法的私有密钥以及可选的属性集等。注意pkcs8不只是能表示RSA，所以比PKCS1更具有通用性 </p>
+</li>
+<li><p>PKCS#12：描述个人信息交换语法标准。描述了将用户公钥、私钥、证书和其他相关信息打包的语法。 </p>
+</li>
+</ul>
+<blockquote>
+<p>总结：PKCS1,8,12都可以在某些情况下当作文件格式，PKCS1描述基础的密钥格式，PKCS8也描述密钥，但格式和1不同，PKCS12等价于PFX文件，包含证书和私钥 </p>
+</blockquote>
+<h2 id="openSSL"><a href="#openSSL" class="headerlink" title="openSSL"></a>openSSL</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># 生成PKCS#1的公私钥</span><br><span class="line">openssl genrsa -out pkcs1_private.pem 1024</span><br><span class="line">openssl rsa -in pkcs1_private.pem -RSAPublicKey_out -out pkcs1_public.pem</span><br><span class="line"></span><br><span class="line">查看私钥</span><br><span class="line"> openssl rsa -in rsa_private_key.pem -text -noout</span><br><span class="line">查看公钥</span><br><span class="line">openssl rsa -pubin -in  rsa_public_key.pem  -text</span><br><span class="line"></span><br><span class="line"># 由PKCS#1的私钥，生成PKCS#8的公私钥</span><br><span class="line">openssl pkcs8 -topk8 -inform PEM -in pkcs1_private.pem -outform PEM -nocrypt -out from_pkcs1_private_to_pkcs8_private.pem</span><br><span class="line"></span><br><span class="line">openssl rsa -in pkcs1_private.pem -pubout -out from_pkcs1_private_to_pkcs8_public.pem</span><br><span class="line"></span><br><span class="line"># 由PKCS#8的私钥，生成PKCS#1的公私钥</span><br><span class="line">openssl rsa -in from_pkcs1_private_to_pkcs8_private.pem -out from_pkcs8_private_to_pkcs1_private.pem</span><br><span class="line"></span><br><span class="line">openssl rsa -in from_pkcs1_private_to_pkcs8_private.pem -RSAPublicKey_out -out from_pkcs8_private_to_pkcs1_public.pem</span><br><span class="line"></span><br><span class="line"># 由PKCS1公钥生成PKCS#8公钥:</span><br><span class="line">openssl rsa -RSAPublicKey_in -in pkcs1_public.pem -pubout -out from_pkcs1_public_to_pkcs8_public.pem</span><br><span class="line"></span><br><span class="line"># 由PKCS8公钥生成PKCS#1公钥:</span><br><span class="line">openssl rsa -pubin -in from_pkcs1_private_to_pkcs8_public.pem -RSAPublicKey_out -out from_pkcs8_public_to_pkcs1_public.pem</span><br><span class="line"></span><br><span class="line">产生证书请求 注意PKCS1 8都可以</span><br><span class="line">openssl req -new -key private_key.pem -out rsaCerReq.csr</span><br><span class="line"></span><br><span class="line">产生证书 注意PKCS1 8都可以</span><br><span class="line">openssl x509 -req -days 3650 -in rsaCerReq.csr -signkey private_key.pem -out rsaCert.crt</span><br><span class="line"></span><br><span class="line">从证书获得公钥：</span><br><span class="line">openssl x509 -in rsaCert.crt  -noout  -pubkey  &gt; public_key.pem</span><br><span class="line"></span><br><span class="line">生成PKCS12</span><br><span class="line">openssl pkcs12 -export -inkey serverprikey.pem -in server.pem -password pass:&quot;123456&quot; -out server_nocret.pfx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">从PKCS12获得证书和私钥</span><br><span class="line">openssl pkcs12 -in server_nocret.pfx -nocerts -nodes  -out alicekey.pem</span><br><span class="line"></span><br><span class="line">openssl pkcs12 -in server_nocret.pfx  -nokeys  -out cert.pem</span><br><span class="line"></span><br><span class="line">查看pkcs12内容 -nodes:因为私钥在在输出前会输出加密结果，所以需要nodes来保证不用打密码和不加密</span><br><span class="line">openssl pkcs12 -in server_nocret.pfx -nocerts -nodes  -out alicekey.pem</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p><a href="https://blog.csdn.net/xy010902100449/article/details/52145009" target="_blank" rel="noopener">https://blog.csdn.net/xy010902100449/article/details/52145009</a><br>注意这个文章的漫画有一个错误的地方，证书并不是CA私钥对公司公钥加密的结果<br>而应该是如下面这个文章的说法，证书=s_KeyPub + s_Info + ca_Info + enc_s_Hash<br>s_KeyPub：公司公钥<br>s_Info：公司信息<br>ca_Info：ca机构<br>enc_s_Hash：ca对公司的认证，=ca_pri(hash(s_KeyPub + s_Info + ca_Info))</p>
 </blockquote>
+<p>证书在通讯中如何加签和验签，</p>
 <blockquote>
 <p><a href="https://zhuanlan.zhihu.com/p/36832100" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36832100</a></p>
+</blockquote>
+<p>阐述PKCS1 PKCS8的区别     </p>
+<blockquote>
+<p><a href="https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/" target="_blank" rel="noopener">https://www.shangyang.me/2017/05/24/encrypt-rsa-keyformat/</a></p>
+</blockquote>
+<p>描述PKCS</p>
+<blockquote>
+<p><a href="https://qsiofttt.iteye.com/blog/1189487" target="_blank" rel="noopener">https://qsiofttt.iteye.com/blog/1189487</a></p>
+</blockquote>
+<p>密钥之间转换：</p>
+<blockquote>
+<p><a href="https://xuanxuanblingbling.github.io/ctf/web/2019/05/10/rsa/" target="_blank" rel="noopener">https://xuanxuanblingbling.github.io/ctf/web/2019/05/10/rsa/</a></p>
 </blockquote>
 
       
@@ -681,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#证书大概讲解"><span class="nav-number">1.</span> <span class="nav-text">证书大概讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种文件"><span class="nav-number">2.</span> <span class="nav-text">各种文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-security包"><span class="nav-number">3.</span> <span class="nav-text">Java security包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#证书概述"><span class="nav-number">1.</span> <span class="nav-text">证书概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种名词和文件后缀"><span class="nav-number">2.</span> <span class="nav-text">各种名词和文件后缀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openSSL"><span class="nav-number">3.</span> <span class="nav-text">openSSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
