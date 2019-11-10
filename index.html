@@ -408,7 +408,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2019/11/10/2019110/" class="post-title-link" itemprop="url">2019110</a>
+                <a href="/blog/2019/11/10/2019110/" class="post-title-link" itemprop="url">写于2019110</a>
               
             
           </h1>
@@ -433,7 +433,7 @@
                 
               
 
-              <time title="创建时间：2019-11-10 23:33:14 / 修改时间：23:33:49" itemprop="dateCreated datePublished" datetime="2019-11-10T23:33:14+08:00">2019-11-10</time>
+              <time title="创建时间：2019-11-10 23:33:14 / 修改时间：23:36:47" itemprop="dateCreated datePublished" datetime="2019-11-10T23:33:14+08:00">2019-11-10</time>
             
 
             
@@ -1677,214 +1677,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/垃圾回收器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wks">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wks藏在这里">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2019/04/15/垃圾回收器/" class="post-title-link" itemprop="url">垃圾回收器</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-04-15 21:13:46" itemprop="dateCreated datePublished" datetime="2019-04-15T21:13:46+08:00">2019-04-15</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
-<h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
-<li>可以使用在新生代</li>
-<li>单线程</li>
-<li>进行收集操作的时候 stop the world </li>
-<li>使用<strong>复制算法</strong>  </li>
-</ol>
-<h1 id="serial-old"><a href="#serial-old" class="headerlink" title="serial_old"></a>serial_old</h1><ol start="0">
-<li>老年代版本的serial 收集器</li>
-<li>单线程 </li>
-<li>使用<strong>标记-整理</strong>算法  </li>
-<li>主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，</li>
-</ol>
-<h1 id="ParNew-收集器"><a href="#ParNew-收集器" class="headerlink" title="ParNew 收集器"></a>ParNew 收集器</h1><ol start="0">
-<li>用在新生代，使用<strong>复制</strong>算法</li>
-<li>serial的多线程版本，</li>
-<li>新生代的首选，除了serial,只有他可以和CMS配合使用，实际上，在CMS作为老年代收集器后新生代只能选择serial和parNew</li>
-<li>-XX：ParallelGCThreads可以限制回收的线程数</li>
-</ol>
-<h1 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h1><ol start="0">
-<li>用在新生代，使用<strong>复制</strong>算法,使用多线程</li>
-<li>别的收集器关注点在于降低STW的时间，而Parallel Scavenge关注的是吞吐量，吞吐量=运行用户代码时间/（用户代码时间+垃圾回收时间）</li>
-<li>Parallel Scavenge收集器提供了两个参数用于精确控制吞吐量，分别是控制最大垃圾收集停顿时间的-XX：MaxGCPauseMillis参数以及直接设置吞吐量大小的-XX：GCTimeRatio参数。</li>
-<li><strong>-XX：+UseAdaptiveSizePolicy</strong> 就不需要手工指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX：SurvivorRatio）、晋升老年代对象年龄（-XX：PretenureSizeThreshold）等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量</li>
-<li>无法与CMS配合使用，原因是Parallel Scavenge没有使用原本HotSpot其它GC通用的那个GC框架，所以不能跟使用了那个框架的CMS搭配使用</li>
-</ol>
-<h1 id="parallel-scavenge-old"><a href="#parallel-scavenge-old" class="headerlink" title="parallel scavenge old"></a>parallel scavenge old</h1><ol start="0">
-<li>用在老年代，多线程，<strong>标记整理</strong>算法</li>
-<li>在1.6后提供，在此之前都只能使用serial_old作为老年代来配合parallel scavenge，效率并不高</li>
-</ol>
-<h1 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h1><ol start="0">
-<li>目的时减少停顿时间，用于老年区</li>
-<li><blockquote>
-<p>阶段包括：<br> 1.初始标记。标记下GC ROOT直接可达的对象，速度快<br> 2.并发标记。进行GC root trace<br> 3.重新标记. 是为了修正并发标记期间用户程序运行产生的垃圾变动，<br> 4.并发清除<br> 初始标记，重新标记仍然需要STW，</p>
-</blockquote>
-</li>
-<li>缺点：  <ol>
-<li>无法处理浮动垃圾，即在并发清除时产生的垃圾，出现concurrent mode failure,所以CMS需要给并发清除预留一部分内存，所以CMS不能像别的收集器一样满了之后才运行，而是在达到阙值后就启动，-XX：CMSInitiatingOccupancyFraction可以设置阙值  </li>
-<li>由于基于标记清除算法，所以可能出现太多碎片，导致大的对象无法分配内存，为了处理这种情况，提供-XX：+UseCMSCompactAtFullCollection ，在每次FUll GC之前进行，碎片整理，和XX：CMSFullGCsBeforeCompaction，这个参数是用于设置执行多少次不压缩的Full GC后，跟着来一次带压缩的</li>
-</ol>
-</li>
-</ol>
-<h1 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h1><p>在内存上将内存分为大小相等的region，新生代和老年代都是一部分<strong>不需要连续的</strong>的region，G1 可以有计划的避免在整个堆中进行回收，而是维护一个优先队列，每次根据运行的时间，优先回收价值最大的region，  </p>
-<p>这里作者提出一个问题：如果分为region，那么每个region里的对象肯定不是孤立的，而是互相有依赖，那么如果想回收新生代，岂不是也要扫描老年代？实际上G1和其他收集器在虚拟机中都是使用remembered set 来记录引用关系，如果虚拟机检测到对引用的修改，那么就立刻更新remembered set ,这样就可以保证不需要扫描全内存。</p>
-<ol start="0">
-<li>G1可以不需要其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果</li>
-<li>G1从整体来看是基于<strong>标记—整理</strong>算法实现的收集器，从局部（两个Region之间）上来看是基于<strong>复制</strong>算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片</li>
-<li>停顿时间可预测，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒 ， </li>
-<li><p>操作主要包括：<br> 1.初始标记，标记GC root直接可达的对象，并改变next top at mark start,STW，时间很短<br> 2.并发标记，进行可达性分析，将引用的变化情况记录在remembered set log<br> 3.最终标记，将remember set log 和remember set合并，STW<br> 4.筛选回收，也可以停顿也可以并行，主要对region回收价值排序，并在用户指定的停顿时间来制定回收计划  </p>
-</li>
-<li><p>相对于CMS，碎片更少空间利用更高，停顿时间可控，</p>
-</li>
-</ol>
-<h1 id="关于吞吐率和停顿时间"><a href="#关于吞吐率和停顿时间" class="headerlink" title="关于吞吐率和停顿时间　　"></a>关于吞吐率和停顿时间　　</h1><p>停顿时间越短就越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高吞吐量则可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务,<br>看到parallel scavenge 注重的时吞吐率，而其他收集器注重停顿时间，觉得这两个不应该是同一种东西吗，减少了停顿时间不就提高了吞吐率吗，但这俩个应该算是两个维度，GC的时间应该是停顿时间的超集。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2063,6 +1855,214 @@
 <p>主动式中断是当需要GC的时候，不主动中断线程，而是设置标志位，线程轮询标准位来判断是否挂起，而轮询的位置就是安全点位置，和分配对象内存的位置，</p>
 <h2 id="安全区域"><a href="#安全区域" class="headerlink" title="安全区域"></a>安全区域</h2><p>安全点没办法解决<strong>当程序</strong>不分配CPU的时候，即程序sleep或blocked的时候，这时无法到达安全点和响应<strong>中断</strong>，就需要安全区域的概念</p>
 <p>简单描述就是在一段代码中，引用关系不变的话，就属于safe region ，在这个区域中进行GC都是可以的，线程会标识自己进入safe region ,这样当进行GC的时候，就不用管这些线程了</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/垃圾回收器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wks">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wks藏在这里">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2019/04/15/垃圾回收器/" class="post-title-link" itemprop="url">垃圾回收器</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-15 21:13:46" itemprop="dateCreated datePublished" datetime="2019-04-15T21:13:46+08:00">2019-04-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
+<h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
+<li>可以使用在新生代</li>
+<li>单线程</li>
+<li>进行收集操作的时候 stop the world </li>
+<li>使用<strong>复制算法</strong>  </li>
+</ol>
+<h1 id="serial-old"><a href="#serial-old" class="headerlink" title="serial_old"></a>serial_old</h1><ol start="0">
+<li>老年代版本的serial 收集器</li>
+<li>单线程 </li>
+<li>使用<strong>标记-整理</strong>算法  </li>
+<li>主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，</li>
+</ol>
+<h1 id="ParNew-收集器"><a href="#ParNew-收集器" class="headerlink" title="ParNew 收集器"></a>ParNew 收集器</h1><ol start="0">
+<li>用在新生代，使用<strong>复制</strong>算法</li>
+<li>serial的多线程版本，</li>
+<li>新生代的首选，除了serial,只有他可以和CMS配合使用，实际上，在CMS作为老年代收集器后新生代只能选择serial和parNew</li>
+<li>-XX：ParallelGCThreads可以限制回收的线程数</li>
+</ol>
+<h1 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h1><ol start="0">
+<li>用在新生代，使用<strong>复制</strong>算法,使用多线程</li>
+<li>别的收集器关注点在于降低STW的时间，而Parallel Scavenge关注的是吞吐量，吞吐量=运行用户代码时间/（用户代码时间+垃圾回收时间）</li>
+<li>Parallel Scavenge收集器提供了两个参数用于精确控制吞吐量，分别是控制最大垃圾收集停顿时间的-XX：MaxGCPauseMillis参数以及直接设置吞吐量大小的-XX：GCTimeRatio参数。</li>
+<li><strong>-XX：+UseAdaptiveSizePolicy</strong> 就不需要手工指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX：SurvivorRatio）、晋升老年代对象年龄（-XX：PretenureSizeThreshold）等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量</li>
+<li>无法与CMS配合使用，原因是Parallel Scavenge没有使用原本HotSpot其它GC通用的那个GC框架，所以不能跟使用了那个框架的CMS搭配使用</li>
+</ol>
+<h1 id="parallel-scavenge-old"><a href="#parallel-scavenge-old" class="headerlink" title="parallel scavenge old"></a>parallel scavenge old</h1><ol start="0">
+<li>用在老年代，多线程，<strong>标记整理</strong>算法</li>
+<li>在1.6后提供，在此之前都只能使用serial_old作为老年代来配合parallel scavenge，效率并不高</li>
+</ol>
+<h1 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h1><ol start="0">
+<li>目的时减少停顿时间，用于老年区</li>
+<li><blockquote>
+<p>阶段包括：<br> 1.初始标记。标记下GC ROOT直接可达的对象，速度快<br> 2.并发标记。进行GC root trace<br> 3.重新标记. 是为了修正并发标记期间用户程序运行产生的垃圾变动，<br> 4.并发清除<br> 初始标记，重新标记仍然需要STW，</p>
+</blockquote>
+</li>
+<li>缺点：  <ol>
+<li>无法处理浮动垃圾，即在并发清除时产生的垃圾，出现concurrent mode failure,所以CMS需要给并发清除预留一部分内存，所以CMS不能像别的收集器一样满了之后才运行，而是在达到阙值后就启动，-XX：CMSInitiatingOccupancyFraction可以设置阙值  </li>
+<li>由于基于标记清除算法，所以可能出现太多碎片，导致大的对象无法分配内存，为了处理这种情况，提供-XX：+UseCMSCompactAtFullCollection ，在每次FUll GC之前进行，碎片整理，和XX：CMSFullGCsBeforeCompaction，这个参数是用于设置执行多少次不压缩的Full GC后，跟着来一次带压缩的</li>
+</ol>
+</li>
+</ol>
+<h1 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h1><p>在内存上将内存分为大小相等的region，新生代和老年代都是一部分<strong>不需要连续的</strong>的region，G1 可以有计划的避免在整个堆中进行回收，而是维护一个优先队列，每次根据运行的时间，优先回收价值最大的region，  </p>
+<p>这里作者提出一个问题：如果分为region，那么每个region里的对象肯定不是孤立的，而是互相有依赖，那么如果想回收新生代，岂不是也要扫描老年代？实际上G1和其他收集器在虚拟机中都是使用remembered set 来记录引用关系，如果虚拟机检测到对引用的修改，那么就立刻更新remembered set ,这样就可以保证不需要扫描全内存。</p>
+<ol start="0">
+<li>G1可以不需要其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果</li>
+<li>G1从整体来看是基于<strong>标记—整理</strong>算法实现的收集器，从局部（两个Region之间）上来看是基于<strong>复制</strong>算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片</li>
+<li>停顿时间可预测，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒 ， </li>
+<li><p>操作主要包括：<br> 1.初始标记，标记GC root直接可达的对象，并改变next top at mark start,STW，时间很短<br> 2.并发标记，进行可达性分析，将引用的变化情况记录在remembered set log<br> 3.最终标记，将remember set log 和remember set合并，STW<br> 4.筛选回收，也可以停顿也可以并行，主要对region回收价值排序，并在用户指定的停顿时间来制定回收计划  </p>
+</li>
+<li><p>相对于CMS，碎片更少空间利用更高，停顿时间可控，</p>
+</li>
+</ol>
+<h1 id="关于吞吐率和停顿时间"><a href="#关于吞吐率和停顿时间" class="headerlink" title="关于吞吐率和停顿时间　　"></a>关于吞吐率和停顿时间　　</h1><p>停顿时间越短就越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高吞吐量则可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务,<br>看到parallel scavenge 注重的时吞吐率，而其他收集器注重停顿时间，觉得这两个不应该是同一种东西吗，减少了停顿时间不就提高了吞吐率吗，但这俩个应该算是两个维度，GC的时间应该是停顿时间的超集。</p>
 
           
         
