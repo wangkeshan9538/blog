@@ -388,6 +388,189 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/11/17/vertx初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wks">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wks藏在这里">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2019/11/17/vertx初探/" class="post-title-link" itemprop="url">vertx初探</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-17 23:00:41 / 修改时间：23:03:29" itemprop="dateCreated datePublished" datetime="2019-11-17T23:00:41+08:00">2019-11-17</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>vertx是一个我去年看完netty就一直想看看的工具，但因为拖延加懒，最近才看了看文档写了写demo, 算是对它有了一点点了解，之所以想写一点，其实是想自己给自己总结下vertx的一些核心的概念。</p>
+<h1 id="vertx-core"><a href="#vertx-core" class="headerlink" title="vertx core"></a>vertx core</h1><p>vertx core 提供了一些 vertx的基本操作，如经常用到的 </p>
+<ol>
+<li>编写TCP客户端和服务器 </li>
+<li>编写HTTP客户端和服务器 </li>
+<li>EventBus</li>
+<li>file操作</li>
+<li>HA</li>
+<li>集群  </li>
+</ol>
+<p>先上一段代码看下vertx创建一个httpServer:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment">//创建一个vertx实例</span></span><br><span class="line">        VertxOptions vo = <span class="keyword">new</span> VertxOptions();</span><br><span class="line">        vo.setEventLoopPoolSize( <span class="number">1</span>);</span><br><span class="line">        Vertx vertx = Vertx.vertx(vo);</span><br><span class="line"></span><br><span class="line">        vertx.deployVerticle(MyFirstVerticle.class.getName()); </span><br><span class="line">        DeploymentOptions().setInstances(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//MyFirstVerticle.java</span></span><br><span class="line">        <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFirstVerticle</span> <span class="keyword">extends</span> <span class="title">AbstractVerticle</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        vertx.createHttpServer().requestHandler(req -&gt; &#123;</span><br><span class="line">            System.out.println(Thread.currentThread());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000L</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            req.response()</span><br><span class="line">                    .putHeader(<span class="string">"content-type"</span>, <span class="string">"text/plain"</span>)</span><br><span class="line">                    .end(<span class="string">"Hello World!"</span>);</span><br><span class="line">            <span class="keyword">this</span>.deploymentID();</span><br><span class="line">            Context c=vertx.getOrCreateContext();</span><br><span class="line">        &#125;).listen(<span class="number">8080</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>vertx实例</strong>是最核心的一个对象 是宁做几乎一切事情的基础，包括创建客户端和服务器、获取事件总线的引用、设置定时器等等。<br>是不是很想说一句，嗨，就这，不就nodejs吗</p>
+<h2 id="EventLoop"><a href="#EventLoop" class="headerlink" title="EventLoop"></a>EventLoop</h2><p>EventLoop算是vertx的基本模型了，简单的讲就是所有的操作都是以 <strong>触发</strong> 的方式来进行，将IO的操作完全交给vertx,开发者真正要关心的是IO各个阶段的 <strong>事件</strong> ，讲的朴素一点就像是js的回调函数一样。<br>个人觉得vertx的EventLoop 基本等同于Netty的模型，如果真要探索起来，怕是要从Linux的多路复用，select函数，java的NIO，和netty一路将过来了，所以尝试用画图的方式来更形象的描绘：<br><img src="/blog/images/eventLoop.png" alt="eventLoop"></p>
+<p>其实EventLoop 就是一条线程，上面挂的每一个channel就是一个IO连接，底层利用的就是IO多路复用加select 或poll,epoll,来保证每一个线程可以保证控制很多个IO连接，而每一个连接都会挂一个handler，来处理这个连接的 每一个事件 例如：init,connected,read.writer,close。<br>这个模型的左半部分同样适用于netty。右半部分有一个workPool是一个线程池，是vertx新增的东西，是用来专门处理耗时操作的，如 file,阻塞的DB操作，为什么要加这个概念哪，因为<strong>不要阻塞EventLoop</strong>是NIO的基本守则。<br>阻塞操作操作代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">executor.executeBlocking(future -&gt; &#123;</span><br><span class="line">    System.out.println(<span class="string">"Action Thread"</span>+Thread.currentThread());</span><br><span class="line">    <span class="comment">// 调用一些需要耗费显著执行时间返回结果的阻塞式API</span></span><br><span class="line">    String result = blockingMethod(<span class="string">"hello"</span>);</span><br><span class="line">    future.complete(result);</span><br><span class="line">&#125;, res -&gt; &#123;</span><br><span class="line">    System.out.println(<span class="string">"Handler Thread"</span>+Thread.currentThread());</span><br><span class="line">    System.out.println(<span class="string">"The result is: "</span> + res.result());</span><br><span class="line">    executor.close();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="verticle"><a href="#verticle" class="headerlink" title="verticle"></a>verticle</h2><p>verticle 其实一直是让我困惑的一个概念，因为vertx的主要运行，基本都是围绕vertx实例来进行的，后面我为verticle找到了一个合理的角色，叫他为vertx实例的一个<strong>发布单元</strong>，什么是一个 发布单元哪，举个例子，一个HttpServer的发布是一个发布单元。<br>verticle具有以下几个特点：</p>
+<ol>
+<li>每个verticle占用一个EventLoop线程，且只对应一个EventLoop</li>
+<li>每个verticle中创建的HttpServer,EventBus等等，都会在这个verticle回收时同步回收</li>
+<li>在多个verticle中创建同样端口的httpServer，不会有错误，会变成两个EventLoop线程处理同一个HttpServer的连接，所以多核机器，肯定是需要设置多个verticle的实例来加强性能的。  </li>
+</ol>
+<p>可以这么想，vertx实例就是一台服务器，而verticle就是上面跑的进程。</p>
+<h2 id="EventBus"><a href="#EventBus" class="headerlink" title="EventBus"></a>EventBus</h2><p>EventBus 是沟通verticle的桥梁，且可沟通集群中不同vertx实例的verticle，操作很简单。这个似乎概念很简单，就是队列呗，上段代码看看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//创建一个EventBus</span><br><span class="line">EventBus eb = vertx.eventBus();</span><br><span class="line"></span><br><span class="line">req.bodyHandler(totalBuffer -&gt; &#123;</span><br><span class="line">    eb.send(&quot;news.uk.sport&quot;, totalBuffer.toString(&quot;UTF-8&quot;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//消费</span><br><span class="line">EventBus eb = vertx.eventBus();</span><br><span class="line">eb.consumer(&quot;news.uk.sport&quot;, message -&gt; &#123;</span><br><span class="line">System.out.println(&quot;前台传入的内容：&quot; + message.body()+&quot;&quot;+this);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>模型如图：<br><img src="/blog/images/eventBus.png" alt="eventBus"></p>
+<h1 id="vertx-web"><a href="#vertx-web" class="headerlink" title="vertx web"></a>vertx web</h1><p>vertx core已经提供了基本的HttpServer的操作，但实际上功能远远不够正常的开发，所以vertx web作为一个拓展包，是web开发必须的。他提供了一个基本概念<strong>router</strong>，来进行各种匹配，使得请求能进入正确的handler，其实就是有点springMvc的各种路径匹配。使用起来代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">HttpServer server = vertx.createHttpServer();</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Router router = Router.router(vertx);</span><br><span class="line"></span><br><span class="line">router.route(<span class="string">"/some/path/"</span>).handler(routingContext -&gt; &#123;</span><br><span class="line"></span><br><span class="line">    HttpServerResponse response = routingContext.response();</span><br><span class="line">    <span class="comment">// 如果不能一次输出所有的response,就需要设置为true</span></span><br><span class="line">    response.setChunked(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    response.write(<span class="string">"route1\n"</span>);</span><br><span class="line"> </span><br><span class="line">&#125;);</span><br><span class="line">server.requestHandler(router).listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<p>web包括的功能很多，有各种匹配，content-type匹配，路径规则匹配，CROS,错误处理，文件传输 等等</p>
+<h1 id="vertx-fileSystem"><a href="#vertx-fileSystem" class="headerlink" title="vertx fileSystem"></a>vertx fileSystem</h1><p>vretx中的文件操作主要采用了javaNio包中的文件操作，通过看源码我们可以发现文件操作也是运行在workPool中的，看下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fs.copy(<span class="string">"C:\\Users\\Administrator\\Desktop\\Untitled-4.txt"</span>, <span class="string">"C:\\Users\\Administrator\\Desktop\\ss.txt"</span>, res -&gt; &#123;</span><br><span class="line">    System.out.println(<span class="string">"file copy handle"</span> + System.currentTimeMillis());</span><br><span class="line">    System.out.println(<span class="string">"file copy handle"</span> + Thread.currentThread());</span><br><span class="line">    <span class="keyword">if</span> (res.succeeded()) &#123;</span><br><span class="line">        System.out.println(<span class="string">"success"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"error"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>源码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//FileSystemImpl.java</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Run the blocking action using a thread from the worker pool.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  context.executeBlockingInternal(<span class="keyword">this</span>, handler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="vertx-DB"><a href="#vertx-DB" class="headerlink" title="vertx DB"></a>vertx DB</h1><p>vertx其实提供了 两种数据库操作。一种是正常的jdbc操作，一种是异步非阻塞的数据库操作，但是只限于PG和mysql。</p>
+<h2 id="jdbc操作"><a href="#jdbc操作" class="headerlink" title="jdbc操作"></a>jdbc操作</h2><p>看一段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">JDBCClient client = JDBCClient.createShared(vertx, <span class="keyword">new</span> JsonObject()</span><br><span class="line">                .put(<span class="string">"url"</span>, <span class="string">"jdbc:postgresql://localhost:5432/postgres"</span>)</span><br><span class="line">                .put(<span class="string">"driver_class"</span>, <span class="string">"org.postgresql.Driver"</span>)</span><br><span class="line">                .put(<span class="string">"max_pool_size"</span>, <span class="number">30</span>).put(<span class="string">"user"</span>,<span class="string">"postgres"</span>).put(<span class="string">"password"</span>,<span class="string">"postgres"</span>));</span><br><span class="line"></span><br><span class="line">client.getConnection(res -&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (res.succeeded()) &#123;</span><br><span class="line">                    SQLConnection connection = res.result();</span><br><span class="line">                    </span><br><span class="line">                    connection.query(<span class="string">"SELECT * FROM userb"</span>, res2 -&gt; &#123;</span><br><span class="line">                        <span class="keyword">if</span> (res2.succeeded()) &#123;</span><br><span class="line">                            ResultSet rs = res2.result();</span><br><span class="line">                            System.out.println(rs.toJson());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">"连接失败"</span>);                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>点进去发现：其实做的还是阻塞操作，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//AbstractJDBCAction.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Connection conn, TaskQueue statementsQueue, Handler&lt;AsyncResult&lt;T&gt;&gt; resultHandler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.ctx.executeBlocking((future) -&gt; &#123;</span><br><span class="line">        <span class="keyword">this</span>.handle(conn, future);</span><br><span class="line">    &#125;, statementsQueue, resultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="异步数据库操作"><a href="#异步数据库操作" class="headerlink" title="异步数据库操作"></a>异步数据库操作</h2><p>这我一直很好奇的，因为jdbc在天然上就是阻塞的，所以要想做到数据库的异步，就得放弃厂商提供的driver，自己做一套编解码，看下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">PgConnectOptions connectOptions = <span class="keyword">new</span> PgConnectOptions()</span><br><span class="line">                .setPort(<span class="number">5432</span>)</span><br><span class="line">                .setHost(<span class="string">"localhost"</span>)</span><br><span class="line">                .setDatabase(<span class="string">"postgres"</span>)</span><br><span class="line">                .setUser(<span class="string">"postgres"</span>)</span><br><span class="line">                .setPassword(<span class="string">"postgres"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Pool options</span></span><br><span class="line">        PoolOptions poolOptions = <span class="keyword">new</span> PoolOptions()</span><br><span class="line">                .setMaxSize(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the client pool</span></span><br><span class="line">        PgPool client = PgPool.pool(vertx, connectOptions, poolOptions);</span><br><span class="line">    </span><br><span class="line">    client.query(<span class="string">"SELECT * FROM  userb "</span>, ar -&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (ar.succeeded()) &#123;</span><br><span class="line">                    RowSet&lt;Row&gt; result = ar.result();</span><br><span class="line">                    result.forEach((r) -&gt; response.write((String)r.getValue(<span class="string">"name"</span>)));</span><br><span class="line">                    response.end();</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">"Failure: "</span> + ar.cause().getMessage();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>这样就能做到数据库的异步操作，且可以包含事务的控制。简直丝滑</p>
+<h3 id="关于数据库异步的思考"><a href="#关于数据库异步的思考" class="headerlink" title="关于数据库异步的思考"></a>关于数据库异步的思考</h3><p>数据库异步看起来十分黑科技，但是我们应该明白的是，异步非阻塞的NIO最大的优点就在于利用很少的线程来控制更多的IO连接，这使得在超多连接，IO密集的操作中有更好的表现，但是数据库连接本来一个java系统就不会占用几个，记得以前看过一个文章讲连接数设置最好=CPUcore<em>2</em>磁盘数，那么数据库的NIO在一般的业务系统中，似乎并不必要。<br>插一个知乎上大佬的回答：</p>
+<blockquote>
+<p><a href="https://www.zhihu.com/question/23084473" target="_blank" rel="noopener">https://www.zhihu.com/question/23084473</a></p>
+</blockquote>
+<h1 id="vertx模型图"><a href="#vertx模型图" class="headerlink" title="vertx模型图"></a>vertx模型图</h1><p><img src="/blog/images/模型.png" alt="模型"><br>简单明了</p>
+<h1 id="vertx的缺点"><a href="#vertx的缺点" class="headerlink" title="vertx的缺点"></a>vertx的缺点</h1><p>说到缺点，明显就是回调地狱了，主要还是看过 python的协程，所以难免拿来做个比较，<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">摘抄自廖雪峰的python教程</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> aiohttp <span class="keyword">import</span> web</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>)</span><br><span class="line">    <span class="keyword">return</span> web.Response(body=<span class="string">b'&lt;h1&gt;Index&lt;/h1&gt;'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>)</span><br><span class="line">    text = <span class="string">'&lt;h1&gt;hello, %s!&lt;/h1&gt;'</span> % request.match_info[<span class="string">'name'</span>]</span><br><span class="line">    <span class="keyword">return</span> web.Response(body=text.encode(<span class="string">'utf-8'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(loop)</span>:</span></span><br><span class="line">    app = web.Application(loop=loop)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/'</span>, index)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/hello/&#123;name&#125;'</span>, hello)</span><br><span class="line">    srv = <span class="keyword">await</span> loop.create_server(app.make_handler(), <span class="string">'127.0.0.1'</span>, <span class="number">8000</span>)</span><br><span class="line">    print(<span class="string">'Server started at http://127.0.0.1:8000...'</span>)</span><br><span class="line">    <span class="keyword">return</span> srv</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(init(loop))</span><br><span class="line">loop.run_forever()</span><br></pre></td></tr></table></figure></p>
+<p>可以看到协程 可以将本该做回调的response handler变成了更符合编程习惯的方式，还是比较舒服的。</p>
+<h1 id="讲点废话"><a href="#讲点废话" class="headerlink" title="讲点废话"></a>讲点废话</h1><p>本来还想把demo放到github上来给像我一样懒的人直接clone下来跑的，但是确实都是官网的例子，放上去太羞耻了。<br>这文章写的很纠结，写详细了东西太多，写总结性的东西吧，太抽象，没看过的觉得一脸懵，懂得觉得写的没啥意义。<br>就这吧，如果有大佬想和我讨论或是哪里写的不对，请积极发炎。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/07/22/java加密/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1529,6 +1712,214 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/垃圾回收器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wks">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wks藏在这里">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2019/04/15/垃圾回收器/" class="post-title-link" itemprop="url">垃圾回收器</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-15 21:13:46" itemprop="dateCreated datePublished" datetime="2019-04-15T21:13:46+08:00">2019-04-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
+<h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
+<li>可以使用在新生代</li>
+<li>单线程</li>
+<li>进行收集操作的时候 stop the world </li>
+<li>使用<strong>复制算法</strong>  </li>
+</ol>
+<h1 id="serial-old"><a href="#serial-old" class="headerlink" title="serial_old"></a>serial_old</h1><ol start="0">
+<li>老年代版本的serial 收集器</li>
+<li>单线程 </li>
+<li>使用<strong>标记-整理</strong>算法  </li>
+<li>主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，</li>
+</ol>
+<h1 id="ParNew-收集器"><a href="#ParNew-收集器" class="headerlink" title="ParNew 收集器"></a>ParNew 收集器</h1><ol start="0">
+<li>用在新生代，使用<strong>复制</strong>算法</li>
+<li>serial的多线程版本，</li>
+<li>新生代的首选，除了serial,只有他可以和CMS配合使用，实际上，在CMS作为老年代收集器后新生代只能选择serial和parNew</li>
+<li>-XX：ParallelGCThreads可以限制回收的线程数</li>
+</ol>
+<h1 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h1><ol start="0">
+<li>用在新生代，使用<strong>复制</strong>算法,使用多线程</li>
+<li>别的收集器关注点在于降低STW的时间，而Parallel Scavenge关注的是吞吐量，吞吐量=运行用户代码时间/（用户代码时间+垃圾回收时间）</li>
+<li>Parallel Scavenge收集器提供了两个参数用于精确控制吞吐量，分别是控制最大垃圾收集停顿时间的-XX：MaxGCPauseMillis参数以及直接设置吞吐量大小的-XX：GCTimeRatio参数。</li>
+<li><strong>-XX：+UseAdaptiveSizePolicy</strong> 就不需要手工指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX：SurvivorRatio）、晋升老年代对象年龄（-XX：PretenureSizeThreshold）等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量</li>
+<li>无法与CMS配合使用，原因是Parallel Scavenge没有使用原本HotSpot其它GC通用的那个GC框架，所以不能跟使用了那个框架的CMS搭配使用</li>
+</ol>
+<h1 id="parallel-scavenge-old"><a href="#parallel-scavenge-old" class="headerlink" title="parallel scavenge old"></a>parallel scavenge old</h1><ol start="0">
+<li>用在老年代，多线程，<strong>标记整理</strong>算法</li>
+<li>在1.6后提供，在此之前都只能使用serial_old作为老年代来配合parallel scavenge，效率并不高</li>
+</ol>
+<h1 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h1><ol start="0">
+<li>目的时减少停顿时间，用于老年区</li>
+<li><blockquote>
+<p>阶段包括：<br> 1.初始标记。标记下GC ROOT直接可达的对象，速度快<br> 2.并发标记。进行GC root trace<br> 3.重新标记. 是为了修正并发标记期间用户程序运行产生的垃圾变动，<br> 4.并发清除<br> 初始标记，重新标记仍然需要STW，</p>
+</blockquote>
+</li>
+<li>缺点：  <ol>
+<li>无法处理浮动垃圾，即在并发清除时产生的垃圾，出现concurrent mode failure,所以CMS需要给并发清除预留一部分内存，所以CMS不能像别的收集器一样满了之后才运行，而是在达到阙值后就启动，-XX：CMSInitiatingOccupancyFraction可以设置阙值  </li>
+<li>由于基于标记清除算法，所以可能出现太多碎片，导致大的对象无法分配内存，为了处理这种情况，提供-XX：+UseCMSCompactAtFullCollection ，在每次FUll GC之前进行，碎片整理，和XX：CMSFullGCsBeforeCompaction，这个参数是用于设置执行多少次不压缩的Full GC后，跟着来一次带压缩的</li>
+</ol>
+</li>
+</ol>
+<h1 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h1><p>在内存上将内存分为大小相等的region，新生代和老年代都是一部分<strong>不需要连续的</strong>的region，G1 可以有计划的避免在整个堆中进行回收，而是维护一个优先队列，每次根据运行的时间，优先回收价值最大的region，  </p>
+<p>这里作者提出一个问题：如果分为region，那么每个region里的对象肯定不是孤立的，而是互相有依赖，那么如果想回收新生代，岂不是也要扫描老年代？实际上G1和其他收集器在虚拟机中都是使用remembered set 来记录引用关系，如果虚拟机检测到对引用的修改，那么就立刻更新remembered set ,这样就可以保证不需要扫描全内存。</p>
+<ol start="0">
+<li>G1可以不需要其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果</li>
+<li>G1从整体来看是基于<strong>标记—整理</strong>算法实现的收集器，从局部（两个Region之间）上来看是基于<strong>复制</strong>算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片</li>
+<li>停顿时间可预测，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒 ， </li>
+<li><p>操作主要包括：<br> 1.初始标记，标记GC root直接可达的对象，并改变next top at mark start,STW，时间很短<br> 2.并发标记，进行可达性分析，将引用的变化情况记录在remembered set log<br> 3.最终标记，将remember set log 和remember set合并，STW<br> 4.筛选回收，也可以停顿也可以并行，主要对region回收价值排序，并在用户指定的停顿时间来制定回收计划  </p>
+</li>
+<li><p>相对于CMS，碎片更少空间利用更高，停顿时间可控，</p>
+</li>
+</ol>
+<h1 id="关于吞吐率和停顿时间"><a href="#关于吞吐率和停顿时间" class="headerlink" title="关于吞吐率和停顿时间　　"></a>关于吞吐率和停顿时间　　</h1><p>停顿时间越短就越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高吞吐量则可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务,<br>看到parallel scavenge 注重的时吞吐率，而其他收集器注重停顿时间，觉得这两个不应该是同一种东西吗，减少了停顿时间不就提高了吞吐率吗，但这俩个应该算是两个维度，GC的时间应该是停顿时间的超集。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/判断对象已死-垃圾回收算法-hotspot实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1748,214 +2139,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/blog/blog/2019/04/15/垃圾回收器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wks">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wks藏在这里">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2019/04/15/垃圾回收器/" class="post-title-link" itemprop="url">垃圾回收器</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-04-15 21:13:46" itemprop="dateCreated datePublished" datetime="2019-04-15T21:13:46+08:00">2019-04-15</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-03 19:05:17" itemprop="dateModified" datetime="2019-05-03T19:05:17+08:00">2019-05-03</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="使用场景总览"><a href="#使用场景总览" class="headerlink" title="使用场景总览"></a>使用场景总览</h1><p><img src="/blog/images/垃圾收集器的使用场景.png" alt="总览"></p>
-<h1 id="serial-收集器"><a href="#serial-收集器" class="headerlink" title="serial 收集器"></a>serial 收集器</h1><ol start="0">
-<li>可以使用在新生代</li>
-<li>单线程</li>
-<li>进行收集操作的时候 stop the world </li>
-<li>使用<strong>复制算法</strong>  </li>
-</ol>
-<h1 id="serial-old"><a href="#serial-old" class="headerlink" title="serial_old"></a>serial_old</h1><ol start="0">
-<li>老年代版本的serial 收集器</li>
-<li>单线程 </li>
-<li>使用<strong>标记-整理</strong>算法  </li>
-<li>主要用途是在jdk1.5 之前parallel scavenge配合，还有作为CMS的后备收集器，在并发收集时发生concurrent Mode Failure时使用，</li>
-</ol>
-<h1 id="ParNew-收集器"><a href="#ParNew-收集器" class="headerlink" title="ParNew 收集器"></a>ParNew 收集器</h1><ol start="0">
-<li>用在新生代，使用<strong>复制</strong>算法</li>
-<li>serial的多线程版本，</li>
-<li>新生代的首选，除了serial,只有他可以和CMS配合使用，实际上，在CMS作为老年代收集器后新生代只能选择serial和parNew</li>
-<li>-XX：ParallelGCThreads可以限制回收的线程数</li>
-</ol>
-<h1 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h1><ol start="0">
-<li>用在新生代，使用<strong>复制</strong>算法,使用多线程</li>
-<li>别的收集器关注点在于降低STW的时间，而Parallel Scavenge关注的是吞吐量，吞吐量=运行用户代码时间/（用户代码时间+垃圾回收时间）</li>
-<li>Parallel Scavenge收集器提供了两个参数用于精确控制吞吐量，分别是控制最大垃圾收集停顿时间的-XX：MaxGCPauseMillis参数以及直接设置吞吐量大小的-XX：GCTimeRatio参数。</li>
-<li><strong>-XX：+UseAdaptiveSizePolicy</strong> 就不需要手工指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX：SurvivorRatio）、晋升老年代对象年龄（-XX：PretenureSizeThreshold）等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量</li>
-<li>无法与CMS配合使用，原因是Parallel Scavenge没有使用原本HotSpot其它GC通用的那个GC框架，所以不能跟使用了那个框架的CMS搭配使用</li>
-</ol>
-<h1 id="parallel-scavenge-old"><a href="#parallel-scavenge-old" class="headerlink" title="parallel scavenge old"></a>parallel scavenge old</h1><ol start="0">
-<li>用在老年代，多线程，<strong>标记整理</strong>算法</li>
-<li>在1.6后提供，在此之前都只能使用serial_old作为老年代来配合parallel scavenge，效率并不高</li>
-</ol>
-<h1 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h1><ol start="0">
-<li>目的时减少停顿时间，用于老年区</li>
-<li><blockquote>
-<p>阶段包括：<br> 1.初始标记。标记下GC ROOT直接可达的对象，速度快<br> 2.并发标记。进行GC root trace<br> 3.重新标记. 是为了修正并发标记期间用户程序运行产生的垃圾变动，<br> 4.并发清除<br> 初始标记，重新标记仍然需要STW，</p>
-</blockquote>
-</li>
-<li>缺点：  <ol>
-<li>无法处理浮动垃圾，即在并发清除时产生的垃圾，出现concurrent mode failure,所以CMS需要给并发清除预留一部分内存，所以CMS不能像别的收集器一样满了之后才运行，而是在达到阙值后就启动，-XX：CMSInitiatingOccupancyFraction可以设置阙值  </li>
-<li>由于基于标记清除算法，所以可能出现太多碎片，导致大的对象无法分配内存，为了处理这种情况，提供-XX：+UseCMSCompactAtFullCollection ，在每次FUll GC之前进行，碎片整理，和XX：CMSFullGCsBeforeCompaction，这个参数是用于设置执行多少次不压缩的Full GC后，跟着来一次带压缩的</li>
-</ol>
-</li>
-</ol>
-<h1 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h1><p>在内存上将内存分为大小相等的region，新生代和老年代都是一部分<strong>不需要连续的</strong>的region，G1 可以有计划的避免在整个堆中进行回收，而是维护一个优先队列，每次根据运行的时间，优先回收价值最大的region，  </p>
-<p>这里作者提出一个问题：如果分为region，那么每个region里的对象肯定不是孤立的，而是互相有依赖，那么如果想回收新生代，岂不是也要扫描老年代？实际上G1和其他收集器在虚拟机中都是使用remembered set 来记录引用关系，如果虚拟机检测到对引用的修改，那么就立刻更新remembered set ,这样就可以保证不需要扫描全内存。</p>
-<ol start="0">
-<li>G1可以不需要其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果</li>
-<li>G1从整体来看是基于<strong>标记—整理</strong>算法实现的收集器，从局部（两个Region之间）上来看是基于<strong>复制</strong>算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片</li>
-<li>停顿时间可预测，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒 ， </li>
-<li><p>操作主要包括：<br> 1.初始标记，标记GC root直接可达的对象，并改变next top at mark start,STW，时间很短<br> 2.并发标记，进行可达性分析，将引用的变化情况记录在remembered set log<br> 3.最终标记，将remember set log 和remember set合并，STW<br> 4.筛选回收，也可以停顿也可以并行，主要对region回收价值排序，并在用户指定的停顿时间来制定回收计划  </p>
-</li>
-<li><p>相对于CMS，碎片更少空间利用更高，停顿时间可控，</p>
-</li>
-</ol>
-<h1 id="关于吞吐率和停顿时间"><a href="#关于吞吐率和停顿时间" class="headerlink" title="关于吞吐率和停顿时间　　"></a>关于吞吐率和停顿时间　　</h1><p>停顿时间越短就越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高吞吐量则可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务,<br>看到parallel scavenge 注重的时吞吐率，而其他收集器注重停顿时间，觉得这两个不应该是同一种东西吗，减少了停顿时间不就提高了吞吐率吗，但这俩个应该算是两个维度，GC的时间应该是停顿时间的超集。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1998,7 +2181,7 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
